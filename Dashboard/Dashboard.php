@@ -13,82 +13,28 @@ session_start();
 
 ?>
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>Dashboard</title>
-<style>
-
-h1{  
-color:white;  
-background-color:red;  
-padding:5px; 
-text-align:center;
-}
-a{
-color:white;   
-
-float:right;
-}
-button{
-           background-color: lightblue;
-           border:5px blue double;     
-           border-radius:25px;
-		   margin:-55px 50px;
-        }
-		
-body{
-	margin:0;
-	padding:0;
-	background-image : url("../Images/gradiant.jpg");
-	background-size : cover;
-	background-position:center;
-	background-repeat: no-repeat;
-	font-family:sans-serif;
-}
-table th,td{
-	padding:100px;
-	border:5px solid #fff;
-}
-marquee{
- 	Left-margine:50px;
-	Right-Margine:50px;
-}
-
-div.b {
-  position: absolute;
-  left: 550px;
-  width: 200px;
-  height: 120px;
-  
-} 
-div.a {
-  position: absolute;
-  left: 50;
-  width: 250px;
-  height: 450px;
-  
-  background-image : url("../Images/avtar.png");
-  background-size : 200px 200px;
-  background-repeat: no-repeat;
-  background-position:center;
-} 
-
-</style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Pass System — Dashboard</title>
+<link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body>
 
-<h1>WELCOME TO DASHBOARD</h1>
-<a href="Logout.php"><button>Logout</button></a>
+<body class="bg-cover bg-app">
 
-<div class="a">
-<h1>ADMIN</h1>
+<div class="dashboard-header">
+	<h1>Welcome to the Dashboard</h1>
+	<a href="Logout.php" class="btn btn-ghost">Logout</a>
 </div>
-<div class="b">
-<table align="center">  
-<tr><th bgcolor="RED"><a href="NewPass.php">NEW PASS</a></th><th bgcolor="Blue"><a href="PrintPass.php">PRINT PASS</a></th></tr>
-<tr><th bgcolor="Yellow"><a href="ViewPass.php">VERIFY PASS</a></th><th bgcolor="Magenta"><a href="AddCategory.php">ADD CATEGORY</a></th></tr>  
-</table>  
-</div>
+
+<nav class="dashboard-grid">
+	<a href="NewPass.php" class="dashboard-card"><span class="icon">🆕</span>New Pass</a>
+	<a href="PrintPass.php" class="dashboard-card"><span class="icon">🖨️</span>Print Pass</a>
+	<a href="ViewPass.php" class="dashboard-card"><span class="icon">🔍</span>Verify Pass</a>
+	<a href="AddCategory.php" class="dashboard-card"><span class="icon">🗂️</span>Add Category</a>
+</nav>
+
 </body>
 </html>

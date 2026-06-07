@@ -6,15 +6,7 @@ session_start();
 			header('location:Dashboard/Dashboard.php');
 		}
 
-?>
-<?php
-
-$host="localhost";
-$user="root";
-$password="";
-$db="epas";
-
-$con=mysqli_connect($host,$user,$password,$db);
+include('dbconnection.php');
 
 if(isset($_POST['username'])){
 	
@@ -52,97 +44,42 @@ if(isset($_POST['username'])){
 
 
 
-<html>  
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<!--<link href="project.css" rel="stylesheet" type="text/css"> -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Pass System — Login</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
 
-<style>  
-h1{  
-color:white;  
-background-color:red;  
-padding:5px; 
-text-align: center;
-}
+<body class="bg-cover bg-login">
 
-h2{  
-padding: 0 0 20px
-margin:0;	
-color:white;   
-text-align: center;   
-   
-}  
-  
-body{
-	margin:0;
-	padding:0;
-	background-image : url("./Images/Nature.jpg");
-	background-size : cover;
-	background-position:center;
-	background-repeat: no-repeat;
-	font-family:sans-serif;
-}
+<header class="page-title">E-PASS SYSTEM</header>
 
-.login-box{
-	hight:420px;
-	width:320px;	
-	background:rgba(0,0,0,0.5);
-	color:#fff;
-	top:50%;
-	left:50%;
-	position:absolute;
-	transform:translate(-50%,-50%);
-	box-sizing:border-box;
-	padding: 30px 50px; 
-}
+<div class="page-center">
+	<div class="card">
+		<img src="Images/avtar.png" alt="User avatar" class="avatar">
+		<h2>Login</h2>
 
-.avtar
-{
-	width:100px;
-	hight:10px;
-	border-radious:50%;
-	position:Absolute;
-	top: -50px;
-	left:calc(50% - 50px);
-}
+		<form method="POST" action="#">
+			<div class="field">
+				<label for="username">Username</label>
+				<input type="text" id="username" name="username" placeholder="Enter Username" required>
+			</div>
+			<div class="field">
+				<label for="password">Password</label>
+				<input type="password" id="password" name="Password" placeholder="Enter Password" required>
+			</div>
+			<button type="submit" name="Submit" class="btn btn-primary btn-block">Login</button>
+		</form>
 
-.login-box p{
-	font-weight:bold;
-}
-.login-box input{
-	width:100%;
-}
-.Reg{
-	text-align: center;
-}
-.forget{
-	text-align: center;
-}
-
-</style>  
-
-</head> 
-
-<body>
-  
-<h1>E-PASS SYSTEM</h1>
-
-<div class="login-box">
-<img src="Images/avtar.png" class="avtar">
-
-<h2>Login</h2>
-
-<form method="POST" action="#">
-<p>Username:</p>
-<input type="text" name="username" placeholder="Enter Username">
-<p>Password:<p>
-<input type="Password" name="Password" placeholder="Enter Password">
-<p><input type="Submit" name="Submit" Value="Login">
-<!--<p><input type="Submit" name="Registration" Value="Registration">-->
-<p class="Reg"><a href="AdminRegistration.php"><font color="white">New Registration</font></a></p>
-<p class="forget"><a href="ForgetPass.php"><font color="white">Forget Password</font></a>
-</form>
-
+		<div class="links">
+			<p><a href="AdminRegistration.php">New Registration</a></p>
+			<p><a href="ForgetPass.php">Forgot Password?</a></p>
+		</div>
+	</div>
 </div>
- 
-</body>  
-</html>  
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+name: epass
+recipe: lamp
+config:
+  webroot: .
+  php: 8.2
+services:
+  phpmyadmin:
+    type: phpmyadmin

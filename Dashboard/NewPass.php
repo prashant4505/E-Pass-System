@@ -42,110 +42,80 @@ session_start();
 			}
 		
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>New Pass</title>
-<style>
-
-h1{  
-color:white;  
-background-color:red;  
-padding:5px; 
-text-align: center;
-}
-.frm{
-	hight:420px;
-	width:350px;	
-	background:rgba(0,0,0,0.5);
-	color:#fff;
-	top:60%;
-	left:50%;
-	position:absolute;
-	transform:translate(-50%,-40%);
-	box-sizing:border-box;
-	padding: 10px 60px; 
-}
-h2{  
-padding: 0 0 20px
-margin:0;	
-color:white;   
-text-align: center;   
-   
-}  
-.frm input{
-	width:100%;
-}
-
-.btn1{
-           background-color: lightblue;
-           border:5px blue double;     
-           border-radius:25px;
-		   margin:-55px 1250px;
-        }
-		
-.btn2{
-           background-color: lightblue;
-           border:5px blue double;     
-           border-radius:25px;
-		   margin:-55px 50px;
-}
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Pass System — New Pass</title>
+<link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body bgcolor="blue">
-</body>
-<h1>Add New Pass</h1>
 
-<a href="Logout.php"><button class="btn1">Logout</button></a>
-<a href="Dashboard.php"><button class="btn2">Back</button></a>
+<body class="bg-cover bg-app">
 
-<div class="frm">
-<h2>Add Details</h2>
-<form method="post" action="NewPass.php">
-
-Full Name:
-<p><input type="text" name="name" placeholder ="Name" required="true"></p>
-<p>Contact Number:</p>
-<p>
-<input type="text" name="mobile" placeholder ="Mobile" required="true"></p>
-<p>Email Address:</p>
-<p><input type="text" name="mail" placeholder ="abc@gmail.com" required="true"></p>
-<p>Identity Type:</p>
-<p><select type="text" name="identity" required="true"></p>
-
-<option value="">Choose Identity Type</option>
-<option value="Voter Card">Voter Card</option>
-<option value="PAN Card">PAN Card</option>
-<option value="Adhar Card">Aadhar Card</option>
-<option value="Student Card">Student Card</option>
-<option value="Driving License">Driving License</option>
-<option value="Passport">Passport</option>
-<option value="Any Official Card">Any Official Card</option>
-<option value="Any Other Govt Issued Doc">Any Other Govt Issued Doc</option>
-</select>
-<p>Identity Card No.:</p>
-<p><input type="text" name="idnum" placeholder ="" required="true"></p>
-
-<p>Category:</p>
-<select type="text" name="category">
-<?php
-$res=mysqli_query($con,"SELECT * FROM `tblcategory`");
-while($row=mysqli_fetch_array($res))
-{
-	?>
-<option>
-<?php echo $row['CategoryName']; ?> </option>
-<?php
-}
-?>
-</select>
-
-<p>From Date:</p>
-<p><input type="text" name="fromDate" placeholder ="dd/mm/yyyy" required="true"></p>
-<p>To Date:</p>
-<p><input type="text" name="toDate" placeholder ="dd/mm/yyyy" required="true"></p>
-<p><input type="Submit" name="Submit" Value="Add"></p>
-</form>
-
+<header class="page-title">Add New Pass</header>
+<div class="top-actions">
+	<a href="Dashboard.php" class="btn btn-ghost">&larr; Back to Dashboard</a>
+	<a href="Logout.php" class="btn btn-ghost">Logout</a>
 </div>
 
+<div class="page-center">
+	<div class="card card-wide">
+		<h2>Pass Details</h2>
+		<form method="post" action="NewPass.php">
+			<div class="field">
+				<label for="name">Full Name</label>
+				<input type="text" id="name" name="name" placeholder="Name" required>
+			</div>
+			<div class="field">
+				<label for="mobile">Contact Number</label>
+				<input type="tel" id="mobile" name="mobile" placeholder="Mobile" required>
+			</div>
+			<div class="field">
+				<label for="mail">Email Address</label>
+				<input type="email" id="mail" name="mail" placeholder="abc@gmail.com" required>
+			</div>
+			<div class="field">
+				<label for="identity">Identity Type</label>
+				<select id="identity" name="identity" required>
+					<option value="">Choose Identity Type</option>
+					<option value="Voter Card">Voter Card</option>
+					<option value="PAN Card">PAN Card</option>
+					<option value="Adhar Card">Aadhar Card</option>
+					<option value="Student Card">Student Card</option>
+					<option value="Driving License">Driving License</option>
+					<option value="Passport">Passport</option>
+					<option value="Any Official Card">Any Official Card</option>
+					<option value="Any Other Govt Issued Doc">Any Other Govt Issued Doc</option>
+				</select>
+			</div>
+			<div class="field">
+				<label for="idnum">Identity Card No.</label>
+				<input type="text" id="idnum" name="idnum" required>
+			</div>
+			<div class="field">
+				<label for="category">Category</label>
+				<select id="category" name="category">
+<?php
+$res = mysqli_query($con, "SELECT * FROM `tblcategory`");
+while ($row = mysqli_fetch_array($res)) {
+	echo '<option>' . htmlspecialchars($row['CategoryName']) . '</option>';
+}
+?>
+				</select>
+			</div>
+			<div class="field">
+				<label for="fromDate">From Date</label>
+				<input type="text" id="fromDate" name="fromDate" placeholder="dd/mm/yyyy" required>
+			</div>
+			<div class="field">
+				<label for="toDate">To Date</label>
+				<input type="text" id="toDate" name="toDate" placeholder="dd/mm/yyyy" required>
+			</div>
+			<button type="submit" name="Submit" value="Add" class="btn btn-primary btn-block">Add Pass</button>
+		</form>
+	</div>
+</div>
+
+</body>
 </html>

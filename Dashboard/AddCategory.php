@@ -34,69 +34,34 @@ if(isset($_POST['Add']))
 	}
 ?>
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-
-<title>Add Category</title>
-
-<style>
-
-h1{  
-color:white;  
-background-color:red;  
-padding:5px; 
-text-align: center;
-}
-
-h2{  
-color:white;    
-padding:5px; 
-text-align: center;
-}
-
-
-.btn{
-           background-color: lightblue;
-           border:5px blue double;     
-           border-radius:25px;
-		   margin:-55px 50px;
-}
-
-.frm{	
-	background:rgba(0,0,0,0.5);
-	color:#fff;
-	top:50%;
-	left:50%;
-	position:absolute;
-	transform:translate(-50%,-50%);
-	box-sizing:border-box;
-	padding: 30px 50px; 
-}
-input{
-	width:100%;
-}
-p{
-	font-weight:bold;
-}
-
-
-</style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Pass System — Add Category</title>
+<link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
-<body bgcolor="blue">
-<h1>ADD CATEGORY</h1>
-<a href="Dashboard.php"><button class="btn">Back</button></a>
+<body class="bg-cover bg-app">
 
-<form method="POST" action="" class="frm">
+<header class="page-title">Add Category</header>
+<div class="top-actions">
+	<a href="Dashboard.php" class="btn btn-ghost">&larr; Back to Dashboard</a>
+</div>
 
-<h2>Category</h2>
-<p>Enter Category Name</p>
-<p><input type="text" name="categorya" placeholder="Enter Category Name" Requierd></p>
-<p><input type="Submit" name="Add"></p>
-</form>
+<div class="page-center">
+	<div class="card card-wide">
+		<h2>New Category</h2>
+		<form method="POST" action="">
+			<div class="field">
+				<label for="categorya">Category Name</label>
+				<input type="text" id="categorya" name="categorya" placeholder="Enter Category Name" required>
+			</div>
+			<button type="submit" name="Add" class="btn btn-primary btn-block">Add Category</button>
+		</form>
+	</div>
+</div>
 
 </body>
-
-
 </html>

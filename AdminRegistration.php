@@ -35,76 +35,51 @@ if (isset($_POST['Submit']))
 
 ?>
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>Admin Registration</title>
-
-<style>
-
-h1{  
-color:white;  
-background-color:Red;  
-padding:5px; 
-text-align: center;
-}
-.frm{
-	hight:420px;
-	width:350px;	
-	background:rgba(0,0,0,0.5);
-	color:#fff;
-	top:50%;
-	left:50%;
-	position:absolute;
-	transform:translate(-50%,-40%);
-	box-sizing:border-box;
-	padding: 10px 60px; 
-}
-h3{  
-padding: 0 0 20px
-margin:0;	
-color:white;   
-text-align: center;
-}
-
-.frm p{
-	font-weight:bold;
-}
-.frm input{
-	width:100%;
-}
-.btn2{
-           background-color: lightblue;
-           border:5px blue double;     
-           border-radius:25px;
-		   margin:-55px 50px;
-}
-
-</style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Pass System — New Registration</title>
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 
-<body bgcolor="Blue">
-<h1>New Registration</h1>
+<body class="bg-cover bg-login">
 
+<header class="page-title">New Registration</header>
+<div class="top-actions">
+	<a href="index.php" class="btn btn-ghost">&larr; Back to Login</a>
+</div>
 
-<a href="index.php"><button class="btn2">Back</button></a>
+<div class="page-center">
+	<div class="card card-wide">
+		<h2>Create Admin Account</h2>
 
-<form method="post" action="#" class="frm">
+		<form method="post" action="#">
+			<div class="field">
+				<label for="name">Name</label>
+				<input type="text" id="name" name="name" placeholder="User Name" required>
+			</div>
+			<div class="field">
+				<label for="mobile">Mobile No.</label>
+				<input type="tel" id="mobile" name="mobile" placeholder="Mobile" required>
+			</div>
+			<div class="field">
+				<label for="mail">Email</label>
+				<input type="email" id="mail" name="mail" placeholder="abc@gmail.com" required>
+			</div>
+			<div class="field">
+				<label for="pass">Password</label>
+				<input type="password" id="pass" name="pass" placeholder="Password" required>
+			</div>
+			<div class="field">
+				<label for="pass2">Re-enter Password</label>
+				<input type="password" id="pass2" name="pass2" placeholder="Password" required>
+			</div>
+			<button type="submit" name="Submit" value="Submit" class="btn btn-primary btn-block">Submit</button>
+		</form>
+	</div>
+</div>
 
-<h3>New Registration</h3>
-<p>Name:</p>
-<p><input type="text" name="name" placeholder="User Name" Required></p>
-<p>Mobile No:</p>
-<p><input type="int" name="mobile" placeholder="Mobile" Required></p>
-<p>Email:</p>
-<p><input type="mail" name="mail" placeholder="abc@gmail.com" Required></p>
-<p>Enter Password</p>
-<p><input type="mail" name="pass" placeholder="Password" Required></p>
-<p>Re-Enter Password</p>
-<p><input type="mail" name="pass2" placeholder="Password" Required></p>
-
-<p><input type="Submit" name="Submit" value="Submit" Required></p>
-
-</form>
-
+</body>
 </html>

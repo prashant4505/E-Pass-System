@@ -6,98 +6,63 @@ if(isset($_POST['search']))
 
 ?>
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-
-<title>Retrieve Password</title>
-
-<style>
-
-h1{  
-color:white;  
-background-color:red;  
-padding:5px; 
-text-align: center;
-}
-
-h3{  
-color:white;    
-padding:5px; 
-text-align: center;
-}
-
-
-input{
-
-	width:50%;
-	text-align: center;
-	padding:5px;
-} 
-table{
-		color:blue;
-		font-size:20;
-		font-weight:bold;
-}
-
-.btn{
-           background-color: lightblue;
-           border:5px blue double;     
-           border-radius:25px;
-		   margin:-55px 50px;
-}
-
-</style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Pass System — Forgot Password</title>
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 
-<body bgcolor="blue">
-<h1>Retrieve Password</h1>
-<a href="index.php"><button class="btn">Back</button></a>
-<center>
-<div class="SearchBox">
+<body class="bg-cover bg-login">
 
-<form method="POST" action="">
-
-<h3>Enter Your Mobile Number</h3>
-<p><input type="text" name="Mobile" Placeholder="Enter Your Mobile Number"></p>
-<p><input type="text" name="Email" Placeholder="Enter Your Email"></p>
-<p><input type="Submit" name="search" Value="Search"></p>
-
-</form>
-
+<header class="page-title">Forgot Password</header>
+<div class="top-actions">
+	<a href="index.php" class="btn btn-ghost">&larr; Back to Login</a>
 </div>
-<div class="pass">
 
-<table border="1" bgcolor="Yellow" > 
-                                    <tr align="center">
-<td colspan="6" style="font-size:20px;color:blue">
- Password:
+<div class="search-card">
+	<h3>Enter Your Mobile Number &amp; Email</h3>
+	<form method="POST" action="">
+		<div class="field">
+			<input type="text" name="Mobile" placeholder="Enter Your Mobile Number">
+		</div>
+		<div class="field">
+			<input type="email" name="Email" placeholder="Enter Your Email">
+		</div>
+		<button type="submit" name="search" class="btn btn-primary btn-block">Search</button>
+	</form>
+</div>
 
+<?php if (isset($_POST['search'])) : ?>
+<div class="result-wrap">
+	<table class="result-table">
+		<caption>Password</caption>
+		<tr>
+			<th>Password</th>
+			<td>
 <?php
+	$mobile = $_POST['Mobile'];
+	$email = $_POST['Email'];
 
-if(isset($_POST['search']))
-{
-	$mobile=$_POST['Mobile'];
-	$email=$_POST['Email'];
-	
-	$query= "SELECT * FROM `login` WHERE Mobile='$mobile' AND email='$email'";
-	$query_run=mysqli_query($con,$query);
-	
-//}
+	$query = "SELECT * FROM `login` WHERE Mobile='$mobile' AND email='$email'";
+	$query_run = mysqli_query($con, $query);
 
-
-	while($row=mysqli_fetch_array($query_run))
-	{
-		echo $row['Pass'];
-	 
-	 }
+	$found = false;
+	while ($row = mysqli_fetch_array($query_run)) {
+		$found = true;
+		echo htmlspecialchars($row['Pass']);
 	}
-	 ?>                          
-  
-   </table>
+	if (!$found) {
+		echo 'No matching account found.';
+	}
+?>
+			</td>
+		</tr>
+	</table>
 </div>
-</center>
+<?php endif; ?>
+
 </body>
-
-
 </html>

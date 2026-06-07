@@ -1,9 +1,9 @@
 <?php
 
-$host="localhost";
-$user="root";
-$password="";
-$db="epas";
+$host="database";
+$user="lamp";
+$password="lamp";
+$db="lamp";
 
 $con=mysqli_connect($host,$user,$password,$db);
 if($con==true)
