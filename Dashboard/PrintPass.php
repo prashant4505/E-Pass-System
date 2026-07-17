@@ -1,83 +1,71 @@
 <?php
+declare(strict_types=1);
+require_once __DIR__ . '/../includes/bootstrap.php';
 
+$admin = requireLogin();
 
-session_start();
-		if ($_SESSION['uid'])
-		{
-			echo "";
-		}
-		
-		else
-		{
-			header('location:../index.php');
-		}
+$row = null;
+$searched = false;
+$passNumInput = '';
 
-
-include('../dbconnection.php');
-
-if (isset($_POST['search'])) {
-	$PassNum = $_POST['passnum'];
-
-	$query = "SELECT * FROM `tblpass` WHERE PassNumber='$PassNum'";
-	$query_run = mysqli_query($con, $query);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['search'])) {
+    csrfCheck();
+    $passNumInput = trim((string) $_POST['passnum']);
+} elseif (isset($_GET['passnum'])) {
+    $passNumInput = trim((string) $_GET['passnum']);
 }
 
+if ($passNumInput !== '') {
+    $searched = true;
+    $stmt = $pdo->prepare('SELECT * FROM tblpass WHERE PassNumber = ?');
+    $stmt->execute([$passNumInput]);
+    $row = $stmt->fetch();
+}
+
+$pageTitle = 'Print Pass';
+$activeNav = 'print-pass';
+require __DIR__ . '/../includes/layout_start.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>E-Pass System — Print Pass</title>
-<link rel="stylesheet" href="../assets/css/style.css">
-</head>
-
-<body class="bg-cover bg-app">
-
-<header class="page-title">Print Pass</header>
-<div class="top-actions">
-	<a href="Dashboard.php" class="btn btn-ghost">&larr; Back to Dashboard</a>
-</div>
-
-<div class="search-card">
+<div class="search-card no-print">
 	<h3>Search Pass by Pass Number</h3>
-	<form method="POST" action="">
+	<form method="POST" action="PrintPass.php">
+		<?= csrfField() ?>
 		<div class="field">
-			<input type="text" name="passnum" placeholder="Enter Pass Number">
+			<input type="text" name="passnum" value="<?= e($passNumInput) ?>" placeholder="Enter Pass Number" required>
 		</div>
-		<button type="submit" name="search" class="btn btn-primary btn-block">Search</button>
+		<button type="submit" name="search" value="1" class="btn btn-primary btn-block">Search</button>
 	</form>
 </div>
 
-<?php
-if (isset($_POST['search'])) {
-	$found = false;
-	while ($row = mysqli_fetch_array($query_run)) {
-		$found = true;
-?>
-<div class="result-wrap">
-	<table class="result-table">
-		<caption>Pass Details</caption>
-		<tr><th>Pass Number</th><td><?php echo htmlspecialchars($row['PassNumber']); ?></td></tr>
-		<tr><th>Category</th><td><?php echo htmlspecialchars($row['Category']); ?></td></tr>
-		<tr><th>Full Name</th><td><?php echo htmlspecialchars($row['Name']); ?></td></tr>
-		<tr><th>Mobile Number</th><td><?php echo htmlspecialchars($row['Mobile']); ?></td></tr>
-		<tr><th>Email</th><td><?php echo htmlspecialchars($row['email']); ?></td></tr>
-		<tr><th>Identity Type</th><td><?php echo htmlspecialchars($row['IdentityType']); ?></td></tr>
-		<tr><th>Identity Card Number</th><td><?php echo htmlspecialchars($row['IdentityCardNo']); ?></td></tr>
-		<tr><th>From Date</th><td><?php echo htmlspecialchars($row['FromDate']); ?></td></tr>
-		<tr><th>To Date</th><td><?php echo htmlspecialchars($row['ToDate']); ?></td></tr>
-	</table>
-	<p style="text-align:center;margin-top:16px;"><button onclick="window.print()" class="btn btn-accent">Print</button></p>
-</div>
-<?php
-	}
-	if (!$found) {
-		echo '<p class="empty-msg">No pass found with that number.</p>';
-	}
-}
-?>
+<?php if ($searched): ?>
+	<?php if (!$row): ?>
+		<p class="empty-msg no-print">No pass found with that number.</p>
+	<?php else: ?>
+	<div class="pass-card">
+		<div class="pass-card-header">
+			<span class="pass-card-title">E-Pass</span>
+			<span class="badge badge-<?= $row['Status'] === 'active' ? 'active' : 'revoked' ?>"><?= e($row['Status']) ?></span>
+		</div>
+		<div class="pass-card-body">
+			<div class="pass-card-details">
+				<p><strong>Pass Number:</strong> <?= e((string) $row['PassNumber']) ?></p>
+				<p><strong>Name:</strong> <?= e($row['Name']) ?></p>
+				<p><strong>Category:</strong> <?= e($row['Category']) ?></p>
+				<p><strong>Mobile:</strong> <?= e($row['Mobile']) ?></p>
+				<p><strong>Email:</strong> <?= e($row['email']) ?></p>
+				<p><strong>Identity:</strong> <?= e($row['IdentityType']) ?> — <?= e($row['IdentityCardNo']) ?></p>
+				<p><strong>Valid:</strong> <?= formatDate($row['FromDate']) ?> to <?= formatDate($row['ToDate']) ?></p>
+			</div>
+			<div class="pass-card-qr">
+				<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?= urlencode((string) $row['PassNumber']) ?>" alt="QR code for pass <?= e((string) $row['PassNumber']) ?>" width="150" height="150" loading="lazy">
+			</div>
+		</div>
+	</div>
+	<p class="no-print" style="text-align:center;margin-top:16px;">
+		<button type="button" onclick="window.print()" class="btn btn-accent">Print</button>
+	</p>
+	<?php endif; ?>
+<?php endif; ?>
 
-</body>
-</html>
+<?php require __DIR__ . '/../includes/layout_end.php'; ?>

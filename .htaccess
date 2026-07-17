@@ -1,0 +1,13 @@
+# Don't reveal directory contents.
+Options -Indexes
+
+# Never serve the SQL dump or any stray .sql file over HTTP.
+<FilesMatch "\.sql$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

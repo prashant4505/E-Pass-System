@@ -1,49 +1,38 @@
 <?php
+declare(strict_types=1);
+require_once __DIR__ . '/includes/bootstrap.php';
 
-session_start();
-		if(isset($_SESSION['uid']))
-		{
-			header('location:Dashboard/Dashboard.php');
-		}
-
-include('dbconnection.php');
-
-if(isset($_POST['username'])){
-	
-	$uname=$_POST['username'];
-	$password=$_POST['Password'];
-	
-	$sql="select * from login where user='".$uname."'AND Pass='".$password."'limit 1";
-	
-	$result=mysqli_query($con,$sql);
-	
-	if(mysqli_num_rows($result)==1){
-		
-		
-		$data=mysqli_fetch_assoc($result);
-		$ID=$data['ID'];
-		
-		//session_start();
-		$_SESSION['uid']=$ID;
-		header('location:Dashboard/Dashboard.php');
-		
-	}
-	else{
-		?>
-		
-		<script>
-		alert("You have Enter Incorect User Name or Password");
-		window.open('index.php','_self');
-		</script>
-		
-		<?php
-	}
+if (!empty($_SESSION['uid'])) {
+    redirect('Dashboard/Dashboard.php');
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'])) {
+    csrfCheck();
+
+    if (loginIsLocked()) {
+        flash('error', 'Too many failed attempts. Please wait a minute and try again.');
+        redirect('index.php');
+    }
+
+    $uname = trim((string) $_POST['username']);
+    $pass  = (string) ($_POST['Password'] ?? '');
+
+    $stmt = $pdo->prepare("SELECT * FROM login WHERE user = ? AND Status = 'active' LIMIT 1");
+    $stmt->execute([$uname]);
+    $row = $stmt->fetch();
+
+    if ($row && password_verify($pass, $row['Pass'])) {
+        clearLoginThrottle();
+        session_regenerate_id(true);
+        $_SESSION['uid'] = $row['ID'];
+        redirect('Dashboard/Dashboard.php');
+    }
+
+    registerFailedLogin();
+    flash('error', 'Incorrect username or password.');
+    redirect('index.php');
+}
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,24 +51,27 @@ if(isset($_POST['username'])){
 		<img src="Images/avtar.png" alt="User avatar" class="avatar">
 		<h2>Login</h2>
 
-		<form method="POST" action="#">
+		<?php renderFlashes(); ?>
+
+		<form method="POST" action="index.php">
+			<?= csrfField() ?>
 			<div class="field">
 				<label for="username">Username</label>
-				<input type="text" id="username" name="username" placeholder="Enter Username" required>
+				<input type="text" id="username" name="username" placeholder="Enter Username" autocomplete="username" required autofocus>
 			</div>
 			<div class="field">
 				<label for="password">Password</label>
-				<input type="password" id="password" name="Password" placeholder="Enter Password" required>
+				<input type="password" id="password" name="Password" placeholder="Enter Password" autocomplete="current-password" required>
 			</div>
-			<button type="submit" name="Submit" class="btn btn-primary btn-block">Login</button>
+			<button type="submit" class="btn btn-primary btn-block">Login</button>
 		</form>
 
 		<div class="links">
-			<p><a href="AdminRegistration.php">New Registration</a></p>
 			<p><a href="ForgetPass.php">Forgot Password?</a></p>
 		</div>
 	</div>
 </div>
 
+<script src="assets/js/app.js"></script>
 </body>
 </html>

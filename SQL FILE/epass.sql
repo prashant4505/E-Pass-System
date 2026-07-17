@@ -1,111 +1,88 @@
--- MySQL dump 10.13  Distrib 5.7.43, for Linux (x86_64)
---
--- Host: localhost    Database: lamp
--- ------------------------------------------------------
--- Server version	5.7.43
+-- E-Pass System — schema + seed data
+-- Passwords are bcrypt hashes (password_hash / PASSWORD_BCRYPT), never plaintext.
+-- Seeded logins: admin / admin (superadmin), Nobita Nobi / 0000 (admin)
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
 
 --
 -- Table structure for table `login`
 --
 
 DROP TABLE IF EXISTS `login`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `login` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `user` varchar(20) NOT NULL,
-  `Pass` varchar(20) NOT NULL,
-  `Mobile` bigint(10) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `user` varchar(30) NOT NULL,
+  `Pass` varchar(255) NOT NULL COMMENT 'bcrypt hash',
+  `Mobile` varchar(15) NOT NULL,
+  `email` varchar(80) NOT NULL,
+  `Role` enum('superadmin','admin') NOT NULL DEFAULT 'admin',
+  `Status` enum('active','inactive') NOT NULL DEFAULT 'active',
+  `CreatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `uniq_login_user` (`user`),
+  UNIQUE KEY `uniq_login_email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `login`
---
+INSERT INTO `login` (`ID`, `user`, `Pass`, `Mobile`, `email`, `Role`, `Status`) VALUES
+(24, 'Nobita Nobi', '$2y$10$xufv4n/BUBW2O/Ts3IGr0ODVIzfnJ.bFuYAOlXSjFuNdevop2FDUu', '9876543210', 'nobi123@gmail.com', 'admin', 'active'),
+(25, 'admin', '$2y$10$xJkwFsUdVGFEtjfc4JFlR.91taPr2Ypfu2k06SKJ5fciv.fDIQjYS', '9876543210', 'admin@gmail.com', 'superadmin', 'active');
 
-LOCK TABLES `login` WRITE;
-/*!40000 ALTER TABLE `login` DISABLE KEYS */;
-INSERT INTO `login` VALUES (24,'Nobita Nobi','0000',9876543210,'nobi123@gmail.com'),(25,'admin','admin',9876543210,'admin@gmail.com');
-/*!40000 ALTER TABLE `login` ENABLE KEYS */;
-UNLOCK TABLES;
+ALTER TABLE `login` AUTO_INCREMENT = 26;
 
 --
 -- Table structure for table `tblcategory`
 --
 
 DROP TABLE IF EXISTS `tblcategory`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tblcategory` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `CategoryName` varchar(50) NOT NULL,
   `CreationDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `uniq_category_name` (`CategoryName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `tblcategory`
---
+INSERT INTO `tblcategory` (`ID`, `CategoryName`) VALUES
+(1, 'Logistic Deliveries'),
+(2, 'Cleaning'),
+(3, 'Essential Services'),
+(4, 'Ecommerce Delivery'),
+(5, 'Medical Supply'),
+(17, 'Examination'),
+(18, 'Emergency Work');
 
-LOCK TABLES `tblcategory` WRITE;
-/*!40000 ALTER TABLE `tblcategory` DISABLE KEYS */;
-INSERT INTO `tblcategory` VALUES (1,'Logistic Deliveries','2020-05-20 04:00:00'),(2,'Cleaning','2020-05-20 04:00:00'),(3,'Essential Services','2020-05-20 04:00:00'),(4,'Eccomerce Delevery Boys','2020-05-20 04:00:00'),(5,'Medical Supply','2020-05-20 04:00:00'),(17,'Examination','0000-00-00 00:00:00'),(18,'Emergency Work','0000-00-00 00:00:00');
-/*!40000 ALTER TABLE `tblcategory` ENABLE KEYS */;
-UNLOCK TABLES;
+ALTER TABLE `tblcategory` AUTO_INCREMENT = 19;
 
 --
 -- Table structure for table `tblpass`
 --
 
 DROP TABLE IF EXISTS `tblpass`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tblpass` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `PassNumber` int(10) NOT NULL,
   `Name` varchar(50) NOT NULL,
-  `Mobile` varchar(10) NOT NULL,
-  `email` varchar(50) NOT NULL,
+  `Mobile` varchar(15) NOT NULL,
+  `email` varchar(80) NOT NULL,
   `IdentityType` varchar(50) NOT NULL,
   `IdentityCardNo` varchar(50) NOT NULL,
   `Category` varchar(50) NOT NULL,
-  `FromDate` varchar(10) NOT NULL,
-  `ToDate` varchar(10) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `FromDate` date NOT NULL,
+  `ToDate` date NOT NULL,
+  `Status` enum('active','revoked') NOT NULL DEFAULT 'active',
+  `CreatedBy` int(11) DEFAULT NULL,
+  `CreatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `uniq_pass_number` (`PassNumber`),
+  KEY `idx_pass_mobile` (`Mobile`),
+  KEY `idx_pass_status` (`Status`),
+  CONSTRAINT `fk_pass_created_by` FOREIGN KEY (`CreatedBy`) REFERENCES `login` (`ID`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `tblpass`
---
+INSERT INTO `tblpass` (`ID`, `PassNumber`, `Name`, `Mobile`, `email`, `IdentityType`, `IdentityCardNo`, `Category`, `FromDate`, `ToDate`, `Status`, `CreatedBy`) VALUES
+(24, 799610586, 'Nobita Nobi', '9876543210', 'nobi123@gmail.com', 'Adhar Card', '784456522652', 'Examination', '2021-02-12', '2021-02-15', 'active', 25);
 
-LOCK TABLES `tblpass` WRITE;
-/*!40000 ALTER TABLE `tblpass` DISABLE KEYS */;
-INSERT INTO `tblpass` VALUES (24,799610586,'Nobita Nobi','9876543210','nobi123@gmail.com','Adhar Card','784456522652','Examination','12/02/2021','15/02/2021');
-/*!40000 ALTER TABLE `tblpass` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+ALTER TABLE `tblpass` AUTO_INCREMENT = 25;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2026-06-07 11:49:58
+SET FOREIGN_KEY_CHECKS = 1;
