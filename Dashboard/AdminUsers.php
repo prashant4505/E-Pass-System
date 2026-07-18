@@ -119,7 +119,7 @@ require __DIR__ . '/../includes/layout_start.php';
 	</form>
 </div>
 
-<div class="result-wrap" style="margin-top:32px;">
+<div class="result-wrap" style="max-width:100%; margin-top:32px;">
 	<table class="result-table data-table">
 		<caption>All Admin Accounts</caption>
 		<thead>

@@ -75,6 +75,7 @@ require __DIR__ . '/../includes/layout_start.php';
 		<?php if (!$recentPasses): ?>
 			<p class="empty-msg">No passes issued yet.</p>
 		<?php else: ?>
+			<div class="table-scroll">
 			<table class="result-table data-table">
 				<thead><tr><th>Pass #</th><th>Name</th><th>Category</th><th>Status</th></tr></thead>
 				<tbody>
@@ -88,6 +89,7 @@ require __DIR__ . '/../includes/layout_start.php';
 				<?php endforeach; ?>
 				</tbody>
 			</table>
+			</div>
 		<?php endif; ?>
 	</div>
 </div>

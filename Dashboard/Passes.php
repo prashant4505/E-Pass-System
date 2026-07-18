@@ -91,6 +91,7 @@ require __DIR__ . '/../includes/layout_start.php';
 </form>
 
 <div class="result-wrap" style="max-width:100%;">
+	<div class="table-scroll">
 	<table class="result-table data-table">
 		<thead>
 			<tr><th>Pass #</th><th>Name</th><th>Mobile</th><th>Category</th><th>Valid</th><th>Status</th><th>Actions</th></tr>
@@ -127,6 +128,7 @@ require __DIR__ . '/../includes/layout_start.php';
 		<?php endforeach; ?>
 		</tbody>
 	</table>
+	</div>
 
 	<?php if ($totalPages > 1): ?>
 	<nav class="pagination">

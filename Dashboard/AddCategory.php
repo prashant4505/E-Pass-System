@@ -50,7 +50,8 @@ require __DIR__ . '/../includes/layout_start.php';
 	</form>
 </div>
 
-<div class="result-wrap">
+<div class="result-wrap" style="max-width:100%;">
+	<div class="table-scroll">
 	<table class="result-table data-table">
 		<caption>Existing Categories</caption>
 		<thead><tr><th>Name</th><th>Created</th><th>Actions</th></tr></thead>
@@ -73,6 +74,7 @@ require __DIR__ . '/../includes/layout_start.php';
 		<?php endforeach; ?>
 		</tbody>
 	</table>
+	</div>
 </div>
 
 <?php require __DIR__ . '/../includes/layout_end.php'; ?>
